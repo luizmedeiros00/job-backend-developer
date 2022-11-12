@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Services\FakerStoreApi\FakerStoreApi;
+use App\Services\FakerStoreApi\FakerStoreApiInterface;
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Support\Facades\Http;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(FakerStoreApiInterface::class, FakerStoreApi::class);
     }
 
     /**
@@ -23,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Http::macro('fakerStore', function () {
+            return Http::baseUrl('https://fakestoreapi.com/products');
+        });
     }
 }
